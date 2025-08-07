@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Baobag Shop</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Helvetica Neue', sans-serif;
+      background-color: #fff;
+      color: #d6336c;
+    }
+    header {
+      background-color: #f8d7da;
+      padding: 20px;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 36px;
+      margin: 0;
+      font-family: 'Cursive', sans-serif;
+    }
+    .announcement {
+      background-color: #f1c0c0;
+      color: #8b0000;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+    .section-title {
+      text-align: center;
+      font-size: 28px;
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+    .products {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 0 20px;
+    }
+    .product-card {
+      background-color: #ffe6eb;
+      border-radius: 15px;
+      width: 200px;
+      text-align: center;
+      padding: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .slider {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .slider img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+    .slider img.active {
+      opacity: 1;
+    }
+    .product-name {
+      font-weight: bold;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    .product-price {
+      color: #e63946;
+      margin-top: 5px;
+      font-size: 14px;
+    }
+    .collection {
+      text-align: center;
+      font-size: 24px;
+      margin: 40px 0;
+      color: #d6336c;
+    }
+    footer {
+      background-color: #f8d7da;
+      text-align: center;
+      padding: 15px;
+      font-size: 16px;
+    }
+    a.order {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 20px;
+      background-color: #d6336c;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    /* Modal for zoom */
+    #zoomModal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+    }
+
+    #zoomModal img {
+      max-width: 90%;
+      max-height: 90%;
+      box-shadow: 0 0 20px #fff;
+    }
+
+    .closeZoom {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 40px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .navArrow {
+      position: absolute;
+      top: 50%;
+      font-size: 50px;
+      color: white;
+      cursor: pointer;
+      user-select: none;
+      transform: translateY(-50%);
+      padding: 10px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    #prevImage {
+      left: 20px;
+    }
+
+    #nextImage {
+      right: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Baobag</h1>
+  </header>
+
+  <div class="announcement">
+你的喜欢包包
+  </div>
+
+  <div class="section-title">Best Sellers</div>
+
+  <div class="products">
+
+    <!-- Bag 1 -->
+    <div class="product-card">
+      <div class="slider">
+        <img src="bag1.jpg.jpg" class="active" />
+        <img src="bag1-2.jpg" />
+        <img src="bag1-3.jpg" />
+      </div>
+      <div class="product-name">Classic Pink Bag</div>
+      <div class="product-price">250 EGP</div>
+      <a class="order-btn" href="https://forms.gle/BWTKLr2RjLPZxXqc6" target="_blank">اطلب الآن</a>
+    </div>
+
+    <!-- Bag 2 -->
+    <div class="product-card">
+      <div class="slider">
+        <img src="bag2.jpg" class="active" />
+        <img src="bag2-2.jpg" />
+        <img src="bag2-3.jpg" />
+      </div>
+      <div class="product-name">LILLY</div>
+      <div class="product-price">450 EGP</div>
+      <a class="order-btn" href="https://forms.gle/BWTKLr2RjLPZxXqc6" target="_blank">اطلب الآن</a>
+    </div>
+
+  </div>
+
+  <div class="collection">Our Collection</div>
+
+  <footer>
+    للطلبات: <a href="https://wa.me/201117877481">+0201115690207</a>
+  </footer>
+
+  <!-- Zoom Modal -->
+  <div id="zoomModal">
+    <span class="closeZoom">&times;</span>
+    <img id="zoomImage" src="" alt="Zoomed Image" />
+    <span id="prevImage" class="navArrow">&#10094;</span>
+    <span id="nextImage" class="navArrow">&#10095;</span>
+  </div>
+
+  <script>
+    // Slide show
+    const sliders = document.querySelectorAll(".slider");
+    sliders.forEach((slider) => {
+      const images = slider.querySelectorAll("img");
+      let index = 0;
+      setInterval(() => {
+        images[index].classList.remove("active");
+        index = (index + 1) % images.length;
+        images[index].classList.add("active");
+      }, 2000);
+    });
+
+    // Zoom + Navigation
+    const zoomModal = document.getElementById("zoomModal");
+    const zoomImage = document.getElementById("zoomImage");
+    const closeZoom = document.querySelector(".closeZoom");
+    const prevArrow = document.getElementById("prevImage");
+    const nextArrow = document.getElementById("nextImage");
+
+    const allImages = Array.from(document.querySelectorAll(".slider img"));
+    let currentIndex = 0;
+
+    function openModal(index) {
+      currentIndex = index;
+      zoomImage.src = allImages[currentIndex].src;
+      zoomModal.style.display = "flex";
+    }
+
+    function showNextImage() {
+      currentIndex = (currentIndex + 1) % allImages.length;
+      zoomImage.src = allImages[currentIndex].src;
+    }
+
+    function showPrevImage() {
+      currentIndex = (currentIndex - 1 + allImages.length) % allImages.length;
+      zoomImage.src = allImages[currentIndex].src;
+    }
+
+    allImages.forEach((img, index) => {
+      img.addEventListener("click", () => openModal(index));
+    });
+
+    closeZoom.onclick = () => (zoomModal.style.display = "none");
+    zoomModal.onclick = (e) => {
+      if (e.target === zoomModal) {
+        zoomModal.style.display = "none";
+      }
+    };
+
+    prevArrow.onclick = showPrevImage;
+    nextArrow.onclick = showNextImage;
+
+    document.addEventListener("keydown", (e) => {
+      if (zoomModal.style.display === "flex") {
+        if (e.key === "ArrowRight") showNextImage();
+        if (e.key === "ArrowLeft") showPrevImage();
+        if (e.key === "Escape") zoomModal.style.display = "none";
+      }
+    });
+  </script>
+
+</body>
+</html>
